@@ -37,16 +37,16 @@ class Video(object):
                 dilated = cv.dilate(edges, (3,3), iterations = 1)
                 eroded = cv.erode(edges, (2,2), iterations = 1)
 
-                # Opening
-                dilateFirst = cv.dilate(edges, (3,3), iterations = 1)
-                opened = cv.erode(dilateFirst, (3,3), iterations = 1)
-
                 # Closing
+                dilateFirst = cv.dilate(edges, (3,3), iterations = 1)
+                closed = cv.erode(dilateFirst, (3,3), iterations = 1)
+
+                # Opening
                 erodeFirst = cv.erode(edges, (2,2), iterations = 1)
-                closed = cv.dilate(erodeFirst, (2,2), iterations = 1)
+                opened = cv.dilate(erodeFirst, (2,2), iterations = 1)
 
                 # Hough Transformation
-                hough = self.houghTransform(edges, 125)
+                hough = self.houghTransform(edges, 175)
 
                 # Contour Detection Using Canny
                 slightBlur = cv.GaussianBlur(grayscale,(3,3),cv.BORDER_DEFAULT)
@@ -71,8 +71,8 @@ class Video(object):
                 cv.imshow('Edge Detection', edges)
                 cv.imshow('Dilation', dilated)
                 cv.imshow('Erosion', eroded)
-                cv.imshow('Opening', opened)
                 cv.imshow('Closing', closed)
+                cv.imshow('Opening', opened)
                 cv.imshow('Hough Transformation', hough)
                 cv.imshow('Binary Image', thresh)
                 cv.imshow('Contours', blank)
@@ -104,7 +104,18 @@ class Video(object):
 
         return cv.resize(frame, dimensions, interpolation=cv.INTER_AREA)
 
-    def houghTransform(self, frame: imghdr, threshold: int):
+    def houghTransform(self, frame: imghdr, threshold: int) -> imghdr:
+        """
+        Finds significant lines in an image and returns 
+        the same image with the lines added.
+
+        Parameters:
+            frame              the original image
+            threshold          the number of intersections in the hough transform
+                               algorithm to constitute a line.
+        Returns:
+            frame with lines   the image with significant lines
+        """
         lines = cv.HoughLines(frame, 1, np.pi / 180, threshold, None, 0, 0)
         cframe = cv.cvtColor(frame, cv.COLOR_GRAY2BGR)
     
