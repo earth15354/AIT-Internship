@@ -1,9 +1,12 @@
+import imghdr
 import cv2 as cv
 import numpy as np
 import os
 
+# Creates the ORB
 orb = cv.ORB_create(nfeatures=1000)
 
+# Sets up path to all image templates and stores their names
 path = "ImageTemplates"
 images = []
 names = []
@@ -14,15 +17,35 @@ for c in myList:
     images.append(imgCur)
     names.append(os.path.splitext(c)[0])
 
-def findDes(images):
+
+def findDes(images: list) -> list:
+    """
+    Given a list of images, returns a list of the descriptions of all the images
+
+    Parameters:
+        images        list of images
+    Returns:
+        desList       list of descriptions
+    """
     desList = []
     for im in images:
         kp,des = orb.detectAndCompute(im, None)
         desList.append(des)
     return desList
 
-def findID(image, desList, thresh):
+def findID(image: imghdr, desList: list, thresh: float) -> int:
+    """
+    Given an image, the descriptions of the template images, and a threshold, 
+    returns the ID of the template image that matches closest to the given image
+    if its over the threshold. If not, then a None is returned.
 
+    Parameters:
+        image         image to compare
+        desList       list of template descriptions
+        thresh        threshold value for number of matches
+    Returns:
+        ID            ID of the closest matching image
+    """
     matchCount = []
     finalVal = None
 
@@ -47,6 +70,9 @@ def findID(image, desList, thresh):
             finalVal = matchCount.index(max(matchCount))
     
     return finalVal
+
+
+# Display and call methods:
 
 capture = cv.VideoCapture(0)
 
