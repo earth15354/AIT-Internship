@@ -1,0 +1,48 @@
+import cv2 as cv
+import numpy as np
+import os
+
+def findIM(image):
+    img_og2 = cv.imread('Images/haitai_og2.jpeg',0)
+
+    orb = cv.ORB_create(nfeatures=1000)
+
+    # kp are key points, des are descriptors
+    kp_og2, des_og2 = orb.detectAndCompute(img_og2, None)
+    kp_p, des_p = orb.detectAndCompute(image, None)
+
+    bf = cv.BFMatcher()
+    matches = bf.knnMatch(des_og2, des_p, k=2)
+
+    good_matches = []
+    for m,n in matches:
+        if m.distance < 0.77*n.distance :
+            good_matches.append([m])
+
+    return len(good_matches)
+
+capture = cv.VideoCapture(0)
+
+b = True
+
+while b == True:
+    # Captures a frame from the webcam
+    ret, frame = capture.read()
+
+    if ret == True:
+        # Mirror Image
+        frame_flip = cv.flip(frame, 1)
+
+        # Converts to grayscale
+        grayscale = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+
+        if findIM(grayscale) >= 25:
+            cv.putText(frame_flip, "These are Haitai crackers!", (15, 30), cv.FONT_HERSHEY_COMPLEX,1,(200,255,50),2)
+
+        cv.imshow('Webcam', frame_flip)
+
+        # Wait 30 milliseconds and if "q" is pressed, close the window
+        if cv.waitKey(30) & 0xFF == ord('q'):
+            b = False
+    else:
+        b = False

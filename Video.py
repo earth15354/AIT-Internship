@@ -5,9 +5,9 @@ import sys
 import math
 
 class Video(object):
-    def __init__(self):
+    def __init__(self, imageSource):
         # Sets up the video class which displays the video from the webcam
-        capture = cv.VideoCapture(0)
+        capture = cv.VideoCapture(imageSource)
 
         b = True
 
@@ -135,4 +135,4 @@ class Video(object):
 
 if __name__ == "__main__":
     # Creates a video object
-    Video()
+    Video(0)
