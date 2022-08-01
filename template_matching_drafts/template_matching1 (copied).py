@@ -7,7 +7,7 @@ img2 = img.copy()
 template = cv.imread('Images/template.png',0)
 w, h = template.shape[::-1]
 # All the 6 methods for comparison in a list
-methods = ['cv.TM_CCOEFF', 'cv.TM_CCOEFF_NORMED', 'cv.TM_CCORR',
+methods = ['cv.TM_CCOEFF', 'cv.TmM_CCOEFF_NORMED', 'cv.TM_CCORR',
             'cv.TM_CCORR_NORMED', 'cv.TM_SQDIFF', 'cv.TM_SQDIFF_NORMED']
 for meth in methods:
     img = img2.copy()
