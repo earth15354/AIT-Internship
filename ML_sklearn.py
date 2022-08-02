@@ -141,7 +141,7 @@ y_bc = bc.target
 
 x_train_bc, x_test_bc, y_train_bc, y_test_bc = train_test_split(x_bc, y_bc, test_size=0.2)
 
-km_model = KMeans(n_clusters = 2, random_state = 0)
+km_model = KMeans(n_clusters = 2)
 km_model.fit(x_train_bc)
 
 predictions = km_model.predict(x_test_bc)
